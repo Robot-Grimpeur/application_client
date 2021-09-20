@@ -1,25 +1,28 @@
+import 'package:application_client/config.dart';
+import 'package:application_client/utils.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-const MAX_ANGLE = 120;
-
-double radians(double degrees) => degrees * pi / 180;
-double degrees(double radians) => radians * 180 / pi;
-
-class Joystick extends StatefulWidget {
-  const Joystick({Key? key}) : super(key: key);
+class TurnAngleInput extends StatefulWidget {
+  const TurnAngleInput({Key? key}) : super(key: key);
 
   @override
-  State<Joystick> createState() => _JoystickState();
+  State<TurnAngleInput> createState() => _TurnAngleInputState();
 }
 
-class _JoystickState extends State<Joystick> {
+class _TurnAngleInputState extends State<TurnAngleInput> {
   double _angle = 0;
+
+  void _updateAngle(double newAngle) {
+    setState(() {
+      _angle = newAngle;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = [
-      500.0,
+      300.0,
       MediaQuery.of(context).size.width,
       MediaQuery.of(context).size.height
     ].reduce(min);
@@ -34,27 +37,47 @@ class _JoystickState extends State<Joystick> {
             child: SizedBox(
           width: size,
           height: size,
-          child: GestureDetector(
-            onPanUpdate: (details) {
-              final localPosition = details.localPosition;
-              final size = context.size!;
-              final relativeX = localPosition.dx - size.width / 2;
-              final relativeY = size.height / 2 - localPosition.dy;
-
-              const maxAngleBySide = MAX_ANGLE / 2;
-              final angle = atan2(relativeX, relativeY)
-                  .clamp(radians(-maxAngleBySide), radians(maxAngleBySide));
-
-              setState(() {
-                _angle = angle.abs() < radians(5) ? 0 : angle;
-              });
-            },
-            child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: CustomPaint(painter: _JoystickPainter(angle: _angle))),
-          ),
+          child: isMobile
+              ? Joystick(
+                  angle: _angle,
+                  updateAngle: _updateAngle,
+                )
+              : const Text('You\'re on desktop'),
         ))
       ],
+    );
+  }
+}
+
+class Joystick extends StatelessWidget {
+  const Joystick(
+      {Key? key,
+      required double angle,
+      required void Function(double newAngle) updateAngle})
+      : _angle = angle,
+        _updateAngle = updateAngle,
+        super(key: key);
+
+  final double _angle;
+  final void Function(double newAngle) _updateAngle;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onPanUpdate: (details) {
+        final localPosition = details.localPosition;
+        final size = context.size!;
+        final relativeX = localPosition.dx - size.width / 2;
+        final relativeY = size.height / 2 - localPosition.dy;
+
+        const maxAngleBySide = maxTurnAngle / 2;
+        final angle = atan2(relativeX, relativeY)
+            .clamp(radians(-maxAngleBySide), radians(maxAngleBySide));
+        _updateAngle(angle.abs() < radians(5) ? 0 : angle);
+      },
+      child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: CustomPaint(painter: _JoystickPainter(angle: _angle))),
     );
   }
 }

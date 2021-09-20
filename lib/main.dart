@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './joystick.dart';
+import 'package:application_client/turn_angle_input.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: const Joystick(),
+      body: const TurnAngleInput(),
     );
   }
 }
