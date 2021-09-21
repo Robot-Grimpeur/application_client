@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:application_client/turn_angle_input.dart';
+import 'package:application_client/speed_input.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,10 +29,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: const TurnAngleInput(),
-    );
+        appBar: AppBar(
+          title: Text(title),
+        ),
+        body: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [TurnAngleInput(), SpeedInput()]));
   }
 }
