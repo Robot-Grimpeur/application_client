@@ -1,5 +1,4 @@
 import 'package:application_client/config.dart';
-import 'package:application_client/utils.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -37,12 +36,10 @@ class _SpeedInputState extends State<SpeedInput> {
             child: SizedBox(
           width: size,
           height: size,
-          child: isMobile
-              ? Lever(
-                  speed: _speed,
-                  updateSpeed: _updateSpeed,
-                )
-              : const Text('You\'re on desktop'),
+          child: Lever(
+            speed: _speed,
+            updateSpeed: _updateSpeed,
+          ),
         ))
       ],
     );

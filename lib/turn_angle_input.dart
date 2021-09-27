@@ -37,12 +37,10 @@ class _TurnAngleInputState extends State<TurnAngleInput> {
             child: SizedBox(
           width: size,
           height: size,
-          child: isMobile
-              ? Joystick(
-                  angle: _angle,
-                  updateAngle: _updateAngle,
-                )
-              : const Text('You\'re on desktop'),
+          child: Joystick(
+            angle: _angle,
+            updateAngle: _updateAngle,
+          ),
         ))
       ],
     );

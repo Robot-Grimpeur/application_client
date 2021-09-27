@@ -28,12 +28,21 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isScreenWide = MediaQuery.of(context).size.width >= 600;
+
     return Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-        ),
-        body: Row(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Flex(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [TurnAngleInput(), SpeedInput()]));
+            direction: isScreenWide ? Axis.horizontal : Axis.vertical,
+            children: const [TurnAngleInput(), SpeedInput()],
+          ),
+        ),
+      ),
+    );
   }
 }
